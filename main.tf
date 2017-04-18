@@ -30,27 +30,27 @@ resource "aws_subnet" "default" {
 }
 
 # A security group for the ELB so it is accessible via the web
-#resource "aws_security_group" "elb" {
-#  name        = "terraform_example_elb"
-#  description = "Used in the terraform"
-#  vpc_id      = "${aws_vpc.main.id}"
+resource "aws_security_group" "elb" {
+  name        = "terraform_example_elb"
+  description = "Used in the terraform"
+  vpc_id      = "${aws_vpc.main.id}"
 
   # HTTP access from anywhere
-#  ingress {
-#    from_port   = 80
-#    to_port     = 80
-#    protocol    = "tcp"
-#    cidr_blocks = ["0.0.0.0/0"]
-#  }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   # outbound internet access
-#  egress {
-#    from_port   = 0
-#    to_port     = 0
-#    protocol    = "-1"
-#    cidr_blocks = ["0.0.0.0/0"]
-#  }
-#}
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 
 # Our default security group to access
 # the instances over SSH and HTTP
@@ -84,20 +84,20 @@ resource "aws_security_group" "default" {
   }
 }
 
-#resource "aws_elb" "web" {
-#  name = "terraform-example-elb"
-#
-#  subnets         = ["${aws_subnet.default.id}"]
-#  security_groups = ["${aws_security_group.elb.id}"]
-#  instances       = ["${aws_instance.web.id}"]
-#
-#  listener {
-#    instance_port     = 80
-#    instance_protocol = "http"
-#    lb_port           = 80
-#    lb_protocol       = "http"
-#  }
-#}
+resource "aws_elb" "web" {
+  name = "terraform-example-elb"
+
+  subnets         = ["${aws_subnet.default.id}"]
+  security_groups = ["${aws_security_group.elb.id}"]
+  instances       = ["${aws_instance.web.id}"]
+
+  listener {
+    instance_port     = 80
+    instance_protocol = "http"
+    lb_port           = 80
+    lb_protocol       = "http"
+  }
+}
 
 resource "aws_key_pair" "auth" {
   key_name   = "${var.key_name}"
